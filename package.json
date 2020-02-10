@@ -4,7 +4,8 @@
   "description": "A student project for [Learn JavaScript with Eric Elliott](https://ericelliottjs.com).",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node -r @babel/register -r @babel/polyfill ./src/index-test.js",
+    "watch": "watch 'clear && npm run -s test | tap-nirvana' src"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,16 @@
   "bugs": {
     "url": "https://github.com/rscharfer/rejection/issues"
   },
-  "homepage": "https://github.com/rscharfer/rejection#readme"
+  "homepage": "https://github.com/rscharfer/rejection#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/polyfill": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/register": "^7.8.3",
+    "riteway": "^6.1.1",
+    "tap-nirvana": "^1.1.0",
+    "watch": "^1.0.2"
+  }
 }
