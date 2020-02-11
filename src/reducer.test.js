@@ -1,34 +1,66 @@
-import { describe } from 'riteway'
+import { describe } from "riteway";
 
-import { reducer, addQuestion } from './reducer.js'
+import { reducer, addQuestion, getScore } from "./reducer.js";
 
-const createState = (...questions) => questions
+const DEFAULT_ID = 12344556,
+  DEFAULT_TIMESTAMP = 909034,
+  DEFAULT_ASKEE = "Boss",
+  DEFAULT_QUESTION = "Can I have a raise?",
+  DEFAULT_STATUS = "Accepted";
 
-const createQuestion = ({ id = 12344556, timestamp = 909034, askee, question, status}) => ({ 
+const createState = (...questions) => questions;
+
+const createQuestion = ({
+  id = DEFAULT_ID,
+  timestamp = DEFAULT_TIMESTAMP,
+  askee = DEFAULT_ASKEE,
+  question = DEFAULT_QUESTION,
+  status = DEFAULT_STATUS
+} = {}) => ({
   timestamp,
   id,
   askee,
   question,
   status
-})
+});
 
-describe('reducer()', async assert=>{
+describe("reducer()", async assert => {
   assert({
-    given: 'no arguments',
-    should: 'return an empty array',
+    given: "no arguments",
+    should: "return an empty array",
     actual: reducer(),
     expected: []
-  })
+  });
+});
+
+describe("addQuestion()", async assert => {
   assert({
-    given: 'ADD_QUESTION action obect',
-    should: 'return the state with that question added',
-    actual: reducer(reducer(), addQuestion({
-      id: 12344556,
-      timestamp: 909034,
-      question: 'Can I have a raise',
-      askee: 'boss',
-      status: 'yes'
-    })),
-    expected: createState(createQuestion({ askee: 'boss', question:'Can I have a raise', status:'yes'}))
-  })
-})
+    given: "state and an addQuestion object",
+    should: "return state with that question added",
+    actual: reducer(
+      reducer(),
+      addQuestion({
+        timestamp: DEFAULT_TIMESTAMP,
+        askee: DEFAULT_ASKEE,
+        question: DEFAULT_QUESTION,
+        status: DEFAULT_STATUS,
+        id: DEFAULT_ID
+      })
+    ),
+    expected: createState(createQuestion())
+  });
+});
+
+describe("getScore()", async assert => {
+  const store = createState(
+    createQuestion(),
+    createQuestion(),
+    createQuestion()
+  );
+  assert({
+    given: "a state with 3 accepted answers",
+    should: "return a score of 3",
+    actual: getScore(store),
+    expected: 3
+  });
+});

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node -r @babel/register -r @babel/polyfill ./src/index-test.js",
-    "watch": "watch 'clear && npm run -s test | tap-nirvana' src"
+    "watch": "watch 'clear && npm run -s test | tap-nirvana' src",
+    "start": "parcel index.html --open"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,11 @@
     "url": "https://github.com/rscharfer/rejection/issues"
   },
   "homepage": "https://github.com/rscharfer/rejection#readme",
-  "dependencies": {},
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "redux": "^4.0.5"
+  },
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/polyfill": "^7.8.3",
@@ -26,6 +31,7 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/register": "^7.8.3",
     "cuid": "^2.1.8",
+    "parcel-bundler": "^1.12.4",
     "riteway": "^6.1.1",
     "tap-nirvana": "^1.1.0",
     "watch": "^1.0.2"

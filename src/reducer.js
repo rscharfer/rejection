@@ -1,6 +1,5 @@
 import cuid from "cuid";
 
-
 const reducer = (state = [], action = {}) => {
   switch (action.type) {
     case addQuestion.type:
@@ -30,4 +29,10 @@ const addQuestion = ({
 
 addQuestion.type = "ADD_QUESTION";
 
-export { reducer, addQuestion };
+const getScore = state => {
+  return state.reduce((acc, next) => {
+    return acc + (next.status === "Accepted" ? 1 : 0);
+  }, 0);
+};
+
+export { reducer, addQuestion, getScore };
