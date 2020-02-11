@@ -29,14 +29,13 @@ const App = ({ state, getScore }) => {
   const handler = status => event => {
     const question = questionInput.current.value;
     const askee = askeeInput.current.value;
-    console.log(question, askee);
     store.dispatch(addQuestion({
       askee,
       question,
       status
     }))
-    question.current.value = '';
-    askee.current.value = '';
+    questionInput.current.value = '';
+    askeeInput.current.value = '';
   }
   return (
     <>
