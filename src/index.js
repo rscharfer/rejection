@@ -1,61 +1,28 @@
-import React, { Fragment, useRef } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 
 import { createStore } from "redux";
-import { reducer, addQuestion, getScore } from "./reducer";
+import { App } from "./components/App.js";
+import { questionsReducer, getScore } from "./reducers/questions-reducer";
 
-const store = createStore(reducer);
 
-store.dispatch(
-  addQuestion({
-    askee: "dog",
-    question: "can you grab me a beer?",
-    status: "Accepted"
-  })
-);
+// redux setup with the reducer
+// listen for store changes with store.subscribe
+// render component in index.html
 
-store.dispatch(
-  addQuestion({
-    askee: "dog",
-    question: "can you grab me a beer?",
-    status: "Accepted"
-  })
-);
+const store = createStore(questionsReducer);
 
-const App = ({ state, getScore }) => {
-  const questionInput = useRef(null);
-  const askeeInput = useRef(null);
-
-  const handler = status => event => {
-    const question = questionInput.current.value;
-    const askee = askeeInput.current.value;
-    store.dispatch(addQuestion({
-      askee,
-      question,
-      status
-    }))
-    questionInput.current.value = '';
-    askeeInput.current.value = '';
-  }
-  return (
-    <>
-      Question: <input ref={questionInput} type="text" />
-      Askee: <input ref={askeeInput} type="text" />
-      <button id='acceptButton' onClick={handler('Accepted')}>Accepted</button>
-      <button id='rejectButton' onClick={handler('Rejected')}>Rejected</button>
-      Total Score: {getScore(state)}
-    </>
-  );
-};
+// we are passing store.disptach into the app manually.. can we map dispatch to props so that we dont have to do this manually?
+const getApp = () => <App dispatch={store.dispatch} score={getScore(store.getState())}/>
 
 store.subscribe(() =>
   ReactDOM.render(
-    <App state={store.getState()} getScore={getScore} />,
+    getApp(),
     document.querySelector("#app")
   )
 );
 
 ReactDOM.render(
-  <App state={store.getState()} getScore={getScore} />,
+  getApp(),
   document.querySelector("#app")
-)
+);

@@ -1,1 +1,1 @@
-import './reducer.test.js'
+import './reducers/questions-reducer.test'

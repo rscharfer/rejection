@@ -1,6 +1,6 @@
 import cuid from "cuid";
 
-const reducer = (state = [], action = {}) => {
+const questionsReducer = (state = [], action = {}) => {
   switch (action.type) {
     case addQuestion.type:
       return [...state, action.payload];
@@ -37,4 +37,4 @@ const getScore = state => {
   }, 0);
 };
 
-export { reducer, addQuestion, getScore };
+export { questionsReducer, addQuestion, getScore };

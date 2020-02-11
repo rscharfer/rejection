@@ -1,6 +1,6 @@
 import { describe } from "riteway";
 
-import { reducer, addQuestion, getScore } from "./reducer.js";
+import { questionsReducer, addQuestion, getScore } from "./questions-reducer";
 
 const DEFAULT_ID = 12344556,
   DEFAULT_TIMESTAMP = 909034,
@@ -24,11 +24,11 @@ const createQuestion = ({
   status
 });
 
-describe("reducer()", async assert => {
+describe("questionsReducer()", async assert => {
   assert({
     given: "no arguments",
     should: "return an empty array",
-    actual: reducer(),
+    actual: questionsReducer(),
     expected: []
   });
 });
@@ -37,8 +37,8 @@ describe("addQuestion()", async assert => {
   assert({
     given: "state and an addQuestion object",
     should: "return state with that question added",
-    actual: reducer(
-      reducer(),
+    actual: questionsReducer(
+      questionsReducer(),
       addQuestion({
         timestamp: DEFAULT_TIMESTAMP,
         askee: DEFAULT_ASKEE,
