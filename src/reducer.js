@@ -31,7 +31,9 @@ addQuestion.type = "ADD_QUESTION";
 
 const getScore = state => {
   return state.reduce((acc, next) => {
-    return acc + (next.status === "Accepted" ? 1 : 0);
+    if (next.status === "Accepted") return acc + 1;
+    else if (next.status === "Rejected") return acc + 10;
+    else return acc;
   }, 0);
 };
 

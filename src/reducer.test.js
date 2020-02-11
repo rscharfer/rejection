@@ -52,15 +52,32 @@ describe("addQuestion()", async assert => {
 });
 
 describe("getScore()", async assert => {
-  const store = createState(
-    createQuestion(),
-    createQuestion(),
-    createQuestion()
-  );
-  assert({
-    given: "a state with 3 accepted answers",
-    should: "return a score of 3",
-    actual: getScore(store),
-    expected: 3
-  });
+  {
+    const store = createState(
+      createQuestion(),
+      createQuestion(),
+      createQuestion()
+    );
+    assert({
+      given: "a state with 3 accepted asks",
+      should: "return a score of 3",
+      actual: getScore(store),
+      expected: 3
+    });
+  }
+  {
+    const store = createState(
+      createQuestion(),
+      createQuestion(),
+      createQuestion(),
+      createQuestion({status: 'Rejected'})
+    );
+    assert({
+      given: "a state with 3 accepted asks and 1 rejected ask",
+      should: "return a score of 13",
+      actual: getScore(store),
+      expected: 13
+    });
+  }
+  
 });
