@@ -1,5 +1,6 @@
 import { describe } from "riteway";
 
+// reducer , actionCreator, and selector all in same file?
 import { questionsReducer, addQuestion, getScore } from "./questions-reducer";
 
 const DEFAULT_ID = 12344556,
@@ -33,9 +34,9 @@ describe("questionsReducer()", async assert => {
   });
 });
 
-describe("addQuestion()", async assert => {
+describe("questionsReducer()", async assert => {
   assert({
-    given: "state and an addQuestion object",
+    given: "current state and an addQuestion object",
     should: "return state with that question added",
     actual: questionsReducer(
       questionsReducer(),
@@ -79,5 +80,30 @@ describe("getScore()", async assert => {
       expected: 13
     });
   }
+  {
+    const store = createState(
+      createQuestion(),
+      createQuestion(),
+      createQuestion(),
+      createQuestion({status: 'Unanswered'})
+    );
+    assert({
+      given: "a state with 3 accepted asks and 1 unanswered ask",
+      should: "return a score of 3",
+      actual: getScore(store),
+      expected: 3
+    });
+  }
+  {
+    const store = createState();
+    assert({
+      given: "a state with 0 questions",
+      should: "return a score of 0",
+      actual: getScore(store),
+      expected: 0
+    });
+  }
   
 });
+
+
