@@ -4,7 +4,7 @@
   "description": "A student project for [Learn JavaScript with Eric Elliott](https://ericelliottjs.com).",
   "main": "index.js",
   "scripts": {
-    "test": "node -r @babel/register -r @babel/polyfill ./src/index-test.js",
+    "test": "babel-node ./src/index-test.js",
     "watch": "watch 'clear && npm run -s test | tap-nirvana' src",
     "dev": "next",
     "build": "next build",
@@ -30,10 +30,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
-    "@babel/polyfill": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/preset-react": "^7.8.3",
-    "@babel/register": "^7.8.3",
+    "@babel/node": "^7.8.4",
     "cuid": "^2.1.8",
     "riteway": "^6.1.1",
     "tap-nirvana": "^1.1.0",
