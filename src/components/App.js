@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-import { addQuestion } from '../reducers/questions-reducer'
+import { connect } from 'react-redux';
+import { addQuestion, getScore } from '../reducers/questions-reducer'
 
 
 
-const App = ({ score, dispatch }) => {
+let App = ({ score, dispatch }) => {
   const questionInput = useRef(null);
   const askeeInput = useRef(null);
 
@@ -35,5 +36,12 @@ const App = ({ score, dispatch }) => {
   );
 };
 
+
+
+const mapStateToProps = state => ({
+  score: getScore(state)
+});
+
+App = connect(mapStateToProps)(App)
 
 export { App }
