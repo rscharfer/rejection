@@ -20,16 +20,5 @@ describe("<App/>", async assert => {
       actual: $("button").length,
       expected: 2
     });
-    assert({
-      given: "<App/>",
-      should: "have the right score",
-      actual: parseInt(
-        $("#score")
-          .html()
-          .trim(),
-        10
-      ),
-      expected: 5
-    });
   }
 });

@@ -4,7 +4,7 @@ import { addQuestion, getScore } from '../reducers/questions-reducer'
 
 
 
-let App = ({ score, dispatch }) => {
+export const App = ({ score, dispatch }) => {
   const questionInput = useRef(null);
   const askeeInput = useRef(null);
 
@@ -42,6 +42,6 @@ const mapStateToProps = state => ({
   score: getScore(state)
 });
 
-App = connect(mapStateToProps)(App)
+const AppWrapper = connect(mapStateToProps)(App)
 
-export { App }
+export default AppWrapper

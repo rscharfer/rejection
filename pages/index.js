@@ -1,5 +1,5 @@
-import { App } from "../src/components/App";
+import AppWrapper from "../src/components/App";
 
-export default App;
+export default AppWrapper;
 
 
