@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { connect } from 'react-redux';
-import { addQuestion, getScore } from '../reducers/questions-reducer'
+import { addQuestion, getScore } from '../../reducers/questions-reducer'
+
+import Score from '../Score/Score';
 
 
 
@@ -31,7 +33,7 @@ export const App = ({ score, dispatch }) => {
       <button id="rejectButton" onClick={handler("Rejected")}>
         Rejected
       </button>
-      Total Score: <span id="score">{score}</span>
+      <Score score={score}/>
     </>
   );
 };
