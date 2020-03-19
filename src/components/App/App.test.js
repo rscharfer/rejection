@@ -5,6 +5,7 @@ import { App } from "./App";
 describe("<App/>", async assert => {
   const createApp = score => render(<App score={score} />);
 
+// make sure it renders a <Score/> component?
   {
     const $ = createApp(5);
 

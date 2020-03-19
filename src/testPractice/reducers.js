@@ -1,45 +1,50 @@
 import cuid from "cuid";
-export const questions = (state = [], action = {}) => {
-  switch (action.type) {
-    case addQuestion.type:
-      return [...state, action.payload];
-    case editQuestion.type: {
-      const { id, ...rest } = action.payload; 
-      return state.map(questionObj => {
-        return questionObj.id === id
-          ? { ...questionObj, ...rest}
-          : questionObj;
-      });
-    }
-    default:
-      return state;
+
+export const questionReducer = (state = [], action = {}) => {
+  const { type, payload } = action;
+  switch(type) {
+    case addQuestion.type: return [...state, action.payload];
+    case editQuestion.type:
+      return state.map(question => {
+        const { id, ...rest} = action.payload;
+        return question.id === id ? {...question, ...rest} : question
+      } )
+    default: return state;
   }
 };
-
 
 
 export const addQuestion = ({
   question,
   askee,
   status,
-  timeStamp = Date.now(),
-  id = cuid()
-} = {}) => ({
+  id = cuid(),
+  timeStamp = Date.now()
+}) => ({
   type: addQuestion.type,
-  payload: {
+  payload:{
     question,
     askee,
     status,
-    timeStamp,
     id,
+    timeStamp
   }
-});
-addQuestion.type = "ADD_QUESTION";
+})
 
+addQuestion.type = 'ADD_QUESTION';
 
 export const editQuestion = (payload) => ({
   type: editQuestion.type,
   payload
-});
-editQuestion.type = "EDIT_QUESTION";
+})
 
+editQuestion.type = 'EDIT_QUESTION';
+
+
+export const getPoints = state => state.reduce((acc, next) => {
+  switch(next.status){
+    case 'Accepted' : return acc + 1;
+    case 'Rejected' : return acc + 10;
+    default: return acc;
+  }
+}, 0) 

@@ -2,12 +2,11 @@ import { describe } from "riteway";
 import cuid from "cuid";
 
 import {
-  questions, // reducer: questions
+  questionReducer, // reducer: questions
   addQuestion, // action creator: addQuestion
-  editQuestion // action creator: editQuestion
+  editQuestion, // action creator: editQuestion
+  getPoints
 } from "./reducers";
-
-import { getPoints } from "./selectors";
 
 const createState = (...questions) => [...questions];
 
@@ -26,156 +25,93 @@ const createQuestion = ({
 });
 const TIME_STAMP = 123244;
 
-describe("questions()", async assert => {
+describe("questionReducer", async assert => {
   assert({
     given: "no arguments",
-    should: "returns an empty array",
-    actual: questions(),
-    expected: []
+    should: "return valid default state",
+    actual: questionReducer(),
+    expected: createState()
   });
 
-  // ADD_QUESTION
   assert({
-    given: "state and 'ADD_QUESTION' action",
-    should: "return state with new question",
-    actual: questions(
-      questions(),
-      addQuestion({
-        askee: "gardener",
-        question: "Can I have a flower?",
-        status: "Rejected",
-        timeStamp: TIME_STAMP,
-        id: "acadsfad"
-      })
-    ),
-    expected: createState(
-      createQuestion({
-        askee: "gardener",
-        question: "Can I have a flower?",
-        status: "Rejected",
-        timeStamp: TIME_STAMP,
-        id: "acadsfad"
-      })
-    )
+    given: "unhandled action",
+    should: "return previous state",
+    actual: questionReducer(questionReducer(), { type: "unhandled" }),
+    expected: createState()
   });
 
-  // adding a stream of objects
   {
-    const actionObjects = [
-      addQuestion({
-        id: "acadsfad",
-        timeStamp: TIME_STAMP,
-        askee: "teacher",
-        question: "Can I have a flower?",
-        status: "Rejected"
-      }),
-      addQuestion({
-        id: "sddfs",
-        timeStamp: TIME_STAMP,
-        askee: "gardener",
-        question: "Can I have a flower?",
-        status: "Accepted"
-      }),
-      addQuestion({
-        id: "ffsdf",
-        timeStamp: TIME_STAMP,
-        askee: "mailman",
-        question: "Can I have a flower?",
-        status: "Rejected"
-      })
-    ];
-    let expectedState = createState(
+    const GIVEN = "an ADD_QUESTION action";
+    const SHOULD = "return state with the question added";
+    const id = cuid();
+    const timeStamp = Date.now();
+    const questionActionObject = addQuestion({
+      question: "Will you marry me?",
+      askee: "girlfriend",
+      status: "Rejected",
+      id,
+      timeStamp
+    });
+    const expectedState = createState(
       createQuestion({
-        id: "acadsfad",
-        timeStamp: TIME_STAMP,
-        askee: "teacher",
-        question: "Can I have a flower?",
-        status: "Rejected"
-      }),
-      createQuestion({
-        id: "sddfs",
-        timeStamp: TIME_STAMP,
-        askee: "gardener",
-        question: "Can I have a flower?",
-        status: "Accepted"
-      }),
-      createQuestion({
-        id: "ffsdf",
-        timeStamp: TIME_STAMP,
-        askee: "mailman",
-        question: "Can I have a flower?",
-        status: "Rejected"
+        question: "Will you marry me?",
+        askee: "girlfriend",
+        status: "Rejected",
+        id,
+        timeStamp
       })
     );
-    let state = questions();
-    actionObjects.forEach(ao => {
-      state = questions(state, ao);
-    });
     assert({
-      given: "given a stream of action objects",
-      should: "return correct looking state",
-      actual: state,
+      given: GIVEN,
+      should: SHOULD,
+      actual: questionReducer(questionReducer(), questionActionObject),
       expected: expectedState
     });
   }
 
-  // unhandled action
   {
-    const q1 = createQuestion({ askee: "swimmer" });
-    const q2 = createQuestion({ askee: "mailman" });
-    const initialstate = createState(q1, q2);
-    assert({
-      given: "an action the reducer does not handle",
-      should: "returns the initial state",
-      actual:
-        initialstate /* The questions reducer does not handle change question actions*/ ===
-        questions(initialstate, {
-          type: "ADD_POINTS",
-          payload: { pointsToAdd: 7 }
-        }),
-      expected: true
-    });
-  }
-
-  {
+    const GIVEN = "an EDIT_QUESTION object with a changed question";
+    const SHOULD = "return state with the changed question";
     const id = cuid();
-    assert({
-      given: "an editQuestion action",
-      should: "the right state is returned",
-      actual: questions(
-        createState(createQuestion({ askee: "swimmer", id })),
-        editQuestion({
-          id,
-          askee: "mailman",
-        })
-      ),
-      expected: createState(createQuestion({ askee: "mailman", id }))
+    const timeStamp = Date.now();
+    const oldQuestion = "Can I borrow your typewriter?";
+    const newQuestion = "Can I borrow your computer?";
+    const expectedState = createState(
+      createQuestion({
+        id,
+        timeStamp,
+        question: newQuestion
+      })
+    );
+    const editQuestionActionObject = editQuestion({
+      id,
+      question: newQuestion
     });
+
+    const actualState = questionReducer(
+      createState(createQuestion({ id, timeStamp, question: oldQuestion })),
+      editQuestionActionObject
+    );
+
     assert({
-      given: "an editQuestion action",
-      should: "the right state is returned",
-      actual: questions(
-        createState(createQuestion({ question: "Will you grab me a Coke?", id })),
-        editQuestion({
-          id,
-          question: "Will you grab me a Pepsi?",
-        })
-      ),
-      expected: createState(createQuestion({ question: "Will you grab me a Pepsi?", id }))
+      given: GIVEN,
+      should: SHOULD,
+      actual: actualState,
+      expected: expectedState
     });
   }
 });
 
 describe("getPoints", async assert => {
-  const state = createState(
-    createQuestion({ status: "Accepted" }),
-    createQuestion({ status: "Rejected" }),
-    createQuestion({ status: "Unanswered" })
-  );
   assert({
-    given: "the state",
-    should: "return the correct score",
-    actual: getPoints(state),
+    given: "a state with one accepted and one rejected question",
+    should: "return the correct number of points",
+    actual: getPoints(
+      createState(
+        createQuestion({ status: "Accepted" }),
+        createQuestion({ status: "Rejected" })
+      )
+    ),
     expected: 11
   });
 });

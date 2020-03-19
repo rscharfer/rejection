@@ -1,4 +1,5 @@
 // import './reducers/questions-reducer.test'
 // import './components/App/App.test'
 // import './components/Score/Score.test'
-import './testPractice/reducers.test'
+// import './testPractice/reducers.test'
+import './hoc/hoc.test'
